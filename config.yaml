@@ -1,0 +1,38 @@
+
+experiment:
+  name: he_smpc_benchmark
+  seed: 20260103
+  num_repeats: 5
+  serialize_formats: [pickle, library-native]
+  bandwidth_mbps: [10, 100]  # for optional transport simulation
+  threads: 1
+
+modalities:
+  image:
+    sizes: ["64x64", "128x128", "256x256"]   # 1x1xHxW
+    dtype: float32
+  vector:
+    sizes: [32, 128, 512, 1024, 4096, 16384]
+    dtype: float32
+  gradient:
+    sizes: [10000, 50000, 100000, 500000]    # number of elements
+    dtype: float32
+
+crypto:
+  he_ckks:
+    poly_degrees: [16384, 32768]   # 2^14, 2^15
+    scales: [33554432, 34359738368] # 2^25, 2^35
+    coeff_modulus_bits:
+      - [60, 40, 40, 60]
+      - [60, 60, 40, 60]
+    batch_sizes: [1, 8, 32, 128]
+  he_bfv:
+    poly_degrees: [8192, 16384]    # 2^13, 2^14
+    plaintext_moduli_bits: [15, 16]
+    batch_sizes: [1, 8, 32, 128]
+  smpc_additive:
+    parties: [3, 5, 10]
+    dropout_rates: [0.0, 0.1]
+
+precision:
+  encode: [float32, float64]
